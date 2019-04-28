@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-### The shebang is required for Windows, https://github.com/pallets/werkzeug/issues/1482
 from flask import Flask, request, render_template
 import tinydb
 import uuid
