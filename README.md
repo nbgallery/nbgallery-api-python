@@ -1,12 +1,31 @@
-This project is a minimal implementation of the [nbgallery](https://github.com/nbgallery/nbgallery) server and APIs in order to facilitate development of Jupyter notebook extensions.
+This project is a minimal implementation of the [nbgallery](https://github.com/nbgallery/nbgallery) server and APIs in order to understand the set of endpoints in [nbgallery/controllers](https://github.com/nbgallery/nbgallery/tree/master/app/controllers) and facilitate development of Jupyter notebook extensions.  
 
-The primary API features this project captures for nbextension development are:
- * POST from a Jupyter notebook to nbgallery to create a new notebook in nbgallery
- * PUT from a Jupyter notebook to nbgallery to update an existing notebook in nbgallery
- * POST from a Jupyter tree to nbgallery to register a new environment
- * GET to endpoints like `/starred` to auto-download notebooks from Jupyter tree
- * Endpoint in nbgallery server that shows a button to POST from nbgallery to Jupyter API to "run in Jupyter"
+I am not 100% comfortable reading/writing/understanding either Javascript or Ruby, and if you aren't either, than this project might help you better understand the `nbgallery` server and the Jupyter `nbextensions` that connect Jupyter to the Gallery.
+
+
+#### Endpoints
+So far in this package the endpoints defined are:
+
+ * GET to `/`, returns links to `/environments` and `/notebooks`
+ * GET to `/environments`, returns a json list of environments (`{name, url}`)
+ * POST to `/environments` with `{name, url}` to create a new environment in `environments.json` table
+ * GET to `/notebooks`, returns an html list of notebooks
+ * GET to `/notebooks/<uuid>`, returns a json blob of notebook metadata and content
+ * POST to `/stages` with `{title, description, notebook}`, creates a new notebook in `notebooks.json` table and returns a uuid
  
-The features that aren't included in this package but are important for testing still are:
- * In Jupyter, check if current notebook is different from uploaded notebook in gallery and prompt for updates
  
+#### Databases
+When the Docker container is first started, it creates two [`tinydb`](https://tinydb.readthedocs.io/en/latest/index.html) tables (`environments.json` and `notebooks.json`) with example records.  The databases are stored in the same container as the webserver for this minimal example project (unlike `nbgallery`).
+
+#### Docker container
+To run this Docker container in a development / interactive mode, clone this repo and build/run the Docker file.
+
+```
+git clone https://github.com/nbgallery/nbgallery-api-python
+cd nbgallery-api-python
+docker build -t nbgallery_api . && docker run -it -p 5000:5000 nbgallery_api
+```
+
+
+#### Test notebook
+Once the Docker container is running, the `API test notebook.ipynb` should work to get a list of environments, register a new environment in the database, get a list of notebooks, and create a new notebook in the database.  

@@ -1,0 +1,7 @@
+Notebooks page
+
+<ul>
+    {% for item in notebooks %}
+    <li><a href="/notebooks/{{ item.uuid }}">{{ item.title }}</a></li>
+    {% endfor %}
+</ul>
